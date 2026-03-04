@@ -1,0 +1,10 @@
+# The compiled program binary
+mc-radar
+
+# Originally the program was outputting to a file
+output.txt
+
+# After an updated gorm was implemented to allow storing the results in a sqlite databse
+data.db
+data.db-shm
+data.db-wal
