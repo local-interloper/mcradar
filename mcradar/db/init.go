@@ -17,10 +17,9 @@ var Ctx context.Context
 func Init() {
 	var err error
 
-	dsn := fmt.Sprintf("host=%s user=postgres password=%s port=%s database=%s sslmode=disable",
+	dsn := fmt.Sprintf("host=%s user=postgres password=%s port=5432 database=%s sslmode=disable",
 		os.Getenv("POSTGRES_HOST"),
 		os.Getenv("POSTGRES_PASSWORD"),
-		os.Getenv("POSTGRES_PORT"),
 		os.Getenv("POSTGRES_DB"),
 	)
 
