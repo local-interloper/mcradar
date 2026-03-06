@@ -2,7 +2,6 @@ package scanning
 
 import (
 	"math"
-	"strings"
 	"sync"
 
 	"github.com/local-interloper/mc-radar/mcradar/consts"
@@ -19,15 +18,24 @@ func BeginFullRangeScan() {
 	for i := uint32(0); i < consts.Splits-1; i++ {
 		segment := math.MaxUint32 / consts.Splits
 
-		wg.Go(func() { ScanRange(db.DB.Session(&gorm.Session{}), segment*i, segment*(i+1)) })
+		wg.Go(func() { ScanAndAddToDatabase(db.DB.Session(&gorm.Session{}), segment*i, segment*(i+1)) })
 	}
 
 	wg.Wait()
 }
 
-func ScanRange(dbs *gorm.DB, from uint32, to uint32) {
+func ScanAndAddToDatabase(dbs *gorm.DB, from uint32, to uint32) {
 	for n := from; n < to; n++ {
 		addr := NumericIpToString(n)
+
+		results, err := gorm.G[db.ScanResult](dbs).Where("ip = ?", addr).Find(db.Ctx)
+		if err != nil {
+			continue
+		}
+
+		if len(results) != 0 {
+			continue
+		}
 
 		result := ScanServer(dbs, addr)
 		if result == nil {
@@ -39,7 +47,7 @@ func ScanRange(dbs *gorm.DB, from uint32, to uint32) {
 }
 
 func ScanServer(dbs *gorm.DB, addr string) *db.ScanResult {
-	if strings.HasPrefix(addr, "127") {
+	if IsReserved(addr) {
 		return nil
 	}
 
@@ -86,6 +94,7 @@ func ScanServer(dbs *gorm.DB, addr string) *db.ScanResult {
 		Version:       status.Version.Name,
 		OnlinePlayers: status.Players.Online,
 		MaxPlayers:    status.Players.Max,
+		Type:          servertype.Map[serverType],
 		Players:       players,
 	}
 }

@@ -14,5 +14,6 @@ type ScanResult struct {
 	OnlinePlayers int
 	MaxPlayers    int
 	Version       string
+	Type          string
 	Players       []Player `gorm:"many2many:server_players"`
 }

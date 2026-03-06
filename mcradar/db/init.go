@@ -2,21 +2,31 @@ package db
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"os"
 	"time"
 
-	"gorm.io/driver/sqlite"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
 var Ctx context.Context
 
-func init() {
+func Init() {
 	var err error
-	DB, err = gorm.Open(sqlite.Open("data.db?_journal_mode=WAL&_busy_timeout=5000"), &gorm.Config{})
+
+	dsn := fmt.Sprintf("host=%s user=postgres password=%s port=%s database=%s sslmode=disable",
+		os.Getenv("POSTGRES_HOST"),
+		os.Getenv("POSTGRES_PASSWORD"),
+		os.Getenv("POSTGRES_PORT"),
+		os.Getenv("POSTGRES_DB"),
+	)
+
+	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic("failed to connect database")
+		panic(err.Error())
 	}
 
 	Ctx = context.Background()
@@ -28,7 +38,7 @@ func init() {
 		log.Fatal(err)
 	}
 
-	db.SetMaxOpenConns(1)
-	db.SetMaxIdleConns(1)
+	db.SetMaxOpenConns(512)
+	db.SetMaxIdleConns(512)
 	db.SetConnMaxLifetime(time.Hour)
 }

@@ -20,12 +20,3 @@ type McStatus struct {
 	Version VersionModel `json:"version"`
 	Players PlayersModel `json:"players"`
 }
-
-func (m McStatus) Print() {
-	println("Version:", m.Version.Name)
-	println("Players:", m.Players.Online, "/", m.Players.Max)
-	println("Player list:")
-	for _, player := range m.Players.Sample {
-		println("\t", player.Name)
-	}
-}

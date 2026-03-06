@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/local-interloper/mc-radar/mcradar/consts"
 	"github.com/local-interloper/mc-radar/mcradar/types/mcpacket"
 	"github.com/local-interloper/mc-radar/mcradar/types/mcstatus"
 	"github.com/local-interloper/mc-radar/mcradar/types/mcstring"
@@ -30,11 +31,9 @@ type McConnection struct {
 	writer     *bufio.Writer
 }
 
-const TimeoutTime = time.Millisecond * 500
-
 func Connect(params Params) (*McConnection, error) {
 	d := net.Dialer{
-		Timeout: TimeoutTime,
+		Timeout: consts.TimeoutTime,
 	}
 
 	con, err := d.Dial("tcp", net.JoinHostPort(params.Address, strconv.FormatUint(uint64(params.Port), 10)))
@@ -95,15 +94,15 @@ func (m *McConnection) GetServerType() (servertype.ServerType, error) {
 		mculong.New(0),
 	))
 
-	encryptionRequest := mcpacket.New(0x00)
+	serverResponse := mcpacket.New(0x00)
 
-	m.ReadPacket(encryptionRequest)
+	m.ReadPacket(serverResponse)
 
-	if encryptionRequest.Protocol.Value == 0x00 {
+	if serverResponse.Protocol.Value == 0x00 {
 		return servertype.Unknown, errors.New("Failed to connect")
 	}
 
-	if encryptionRequest.Protocol.Value == 0x01 {
+	if serverResponse.Protocol.Value == 0x01 {
 		return servertype.Legit, nil
 	}
 
@@ -111,7 +110,7 @@ func (m *McConnection) GetServerType() (servertype.ServerType, error) {
 }
 
 func (m *McConnection) ReadPacket(packet *mcpacket.McPacket) error {
-	m.connection.SetDeadline(time.Now().Add(TimeoutTime))
+	m.connection.SetDeadline(time.Now().Add(consts.TimeoutTime))
 	if err := packet.FromStream(m.reader); err != nil {
 		return err
 	}
@@ -120,7 +119,7 @@ func (m *McConnection) ReadPacket(packet *mcpacket.McPacket) error {
 }
 
 func (m *McConnection) SendPacket(packet *mcpacket.McPacket) error {
-	m.connection.SetDeadline(time.Now().Add(TimeoutTime))
+	m.connection.SetDeadline(time.Now().Add(consts.TimeoutTime))
 	if err := packet.ToStream(m.writer); err != nil {
 		return err
 	}
