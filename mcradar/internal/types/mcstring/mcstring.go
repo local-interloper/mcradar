@@ -3,7 +3,7 @@ package mcstring
 import (
 	"bufio"
 
-	"github.com/local-interloper/mc-radar/mcradar/internal/types/mcvarint"
+	"github.com/local-interloper/mcradar/mcradar/internal/types/mcvarint"
 )
 
 type McString struct {

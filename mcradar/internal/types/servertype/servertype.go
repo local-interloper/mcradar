@@ -9,7 +9,7 @@ const (
 type ServerType int
 
 var Map map[ServerType]string = map[ServerType]string{
-	Unknown: "Unknown",
-	Legit:   "Legit",
-	Cracked: "Cracked",
+	Unknown: "unknown",
+	Legit:   "legit",
+	Cracked: "cracked",
 }

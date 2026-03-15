@@ -3,7 +3,7 @@ package mcvarint
 import (
 	"bufio"
 
-	"github.com/local-interloper/mc-radar/mcradar/internal/consts"
+	"github.com/local-interloper/mcradar/mcradar/internal/consts"
 )
 
 type McVarInt struct {

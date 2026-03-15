@@ -1,5 +1,6 @@
 from psycopg import Cursor
 import pypika
+import pypika.functions
 from pypika.queries import QueryBuilder
 
 

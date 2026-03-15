@@ -4,21 +4,19 @@ import (
 	"math"
 	"sync"
 
-	"github.com/local-interloper/mc-radar/mcradar/internal/db"
-	"github.com/local-interloper/mc-radar/mcradar/internal/settings"
-	"github.com/local-interloper/mc-radar/mcradar/internal/types/mcconnection"
-	"github.com/local-interloper/mc-radar/mcradar/internal/types/servertype"
+	"github.com/local-interloper/mcradar/mcradar/internal/db"
+	"github.com/local-interloper/mcradar/mcradar/internal/settings"
+	"github.com/local-interloper/mcradar/mcradar/internal/types/mcconnection"
+	"github.com/local-interloper/mcradar/mcradar/internal/types/servertype"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
 
 func BeginFullRangeScan(wg *sync.WaitGroup) {
-	for {
-		for i := uint32(0); i < uint32(settings.Splits)-1; i++ {
-			segment := uint32(math.MaxUint32 / settings.Splits)
+	for i := uint32(0); i < uint32(settings.Splits)-1; i++ {
+		segment := uint32(math.MaxUint32 / settings.Splits)
 
-			wg.Go(func() { ScanAndAddToDatabase(db.DB.Session(&gorm.Session{}), segment*i, segment*(i+1)) })
-		}
+		wg.Go(func() { ScanAndAddToDatabase(db.DB.Session(&gorm.Session{}), segment*i, segment*(i+1)) })
 	}
 }
 
@@ -29,8 +27,9 @@ func ScanAndAddToDatabase(dbs *gorm.DB, from uint32, to uint32) {
 		db.KnownServers.Mutex.RLock()
 		_, ok := db.KnownServers.Store[addr]
 		db.KnownServers.Mutex.RUnlock()
+
 		if ok {
-			return
+			continue
 		}
 
 		result := ScanServer(dbs, addr)

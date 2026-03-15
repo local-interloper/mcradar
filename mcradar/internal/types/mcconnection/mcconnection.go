@@ -8,14 +8,14 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/local-interloper/mc-radar/mcradar/internal/settings"
-	"github.com/local-interloper/mc-radar/mcradar/internal/types/mcpacket"
-	"github.com/local-interloper/mc-radar/mcradar/internal/types/mcstatus"
-	"github.com/local-interloper/mc-radar/mcradar/internal/types/mcstring"
-	"github.com/local-interloper/mc-radar/mcradar/internal/types/mculong"
-	"github.com/local-interloper/mc-radar/mcradar/internal/types/mcushort"
-	"github.com/local-interloper/mc-radar/mcradar/internal/types/mcvarint"
-	"github.com/local-interloper/mc-radar/mcradar/internal/types/servertype"
+	"github.com/local-interloper/mcradar/mcradar/internal/settings"
+	"github.com/local-interloper/mcradar/mcradar/internal/types/mcpacket"
+	"github.com/local-interloper/mcradar/mcradar/internal/types/mcstatus"
+	"github.com/local-interloper/mcradar/mcradar/internal/types/mcstring"
+	"github.com/local-interloper/mcradar/mcradar/internal/types/mculong"
+	"github.com/local-interloper/mcradar/mcradar/internal/types/mcushort"
+	"github.com/local-interloper/mcradar/mcradar/internal/types/mcvarint"
+	"github.com/local-interloper/mcradar/mcradar/internal/types/servertype"
 )
 
 type Params struct {

@@ -12,7 +12,12 @@ services:
         condition: service_healthy
 
     networks:
-      - mc-radar-network
+      - mcradar-network
+
+    develop:
+      watch:
+        - action: rebuild
+          path: ./mcradar
 
   api:
     container_name: mcradar-api
@@ -30,7 +35,12 @@ services:
       - "8000:8000"
 
     networks:
-      - mc-radar-network
+      - mcradar-network
+
+    develop:
+      watch:
+        - action: rebuild
+          path: ./mcradar-api
 
   db:
     container_name: mcradar-db
@@ -42,10 +52,10 @@ services:
     env_file: .env
 
     volumes:
-      - "mc-radar-db-volume:/var/lib/postgresql/18/docker"
+      - "mcradar-db-volume:/var/lib/postgresql/18/docker"
 
     networks:
-      - mc-radar-network
+      - mcradar-network
 
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
@@ -54,8 +64,8 @@ services:
       retries: 5
 
 volumes:
-  mc-radar-db-volume:
+  mcradar-db-volume:
 
 
 networks:
-  mc-radar-network:
+  mcradar-network:

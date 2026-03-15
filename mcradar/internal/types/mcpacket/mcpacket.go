@@ -3,8 +3,8 @@ package mcpacket
 import (
 	"bufio"
 
-	"github.com/local-interloper/mc-radar/mcradar/internal/types/mcserializable"
-	"github.com/local-interloper/mc-radar/mcradar/internal/types/mcvarint"
+	"github.com/local-interloper/mcradar/mcradar/internal/types/mcserializable"
+	"github.com/local-interloper/mcradar/mcradar/internal/types/mcvarint"
 )
 
 type McPacket struct {

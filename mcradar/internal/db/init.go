@@ -7,8 +7,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/local-interloper/mc-radar/mcradar/internal/settings"
-	"github.com/local-interloper/mc-radar/mcradar/internal/types/knownserverstore"
+	"github.com/local-interloper/mcradar/mcradar/internal/settings"
+	"github.com/local-interloper/mcradar/mcradar/internal/types/knownserverstore"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )

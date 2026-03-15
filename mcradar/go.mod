@@ -1,4 +1,4 @@
-module github.com/local-interloper/mc-radar/mcradar
+module github.com/local-interloper/mcradar/mcradar
 
 go 1.25.0
 
