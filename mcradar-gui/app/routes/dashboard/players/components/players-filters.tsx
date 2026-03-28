@@ -1,5 +1,4 @@
 import { Input, Surface } from "@heroui/react";
-import { useEffect, useState } from "react";
 import type { PlayersFiltersType } from "../types/players-filters-type";
 
 export interface Props {
