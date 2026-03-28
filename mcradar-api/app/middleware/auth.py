@@ -5,13 +5,14 @@ import os
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
 
-logger = logging.getLogger(__name__)
-
 API_KEY = os.environ.get("API_KEY")
 
 
 class AuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
+        if request.method == "OPTIONS" or request.url.path == "/api/health":
+            return await call_next(request)
+
         token = request.headers.get("Authorization")
 
         if token is None:

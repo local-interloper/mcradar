@@ -6,7 +6,7 @@ from typing import Optional
 import pypika
 from pydantic.alias_generators import to_camel
 from models.pagination import Pagination
-from models.filters import Filters
+from models.servers_filters import ServersFilters
 from models.paginated_data_response import PaginatedDataResponse
 from utils.get_total import get_total
 from db import DatabaseDep
@@ -16,12 +16,13 @@ servers_router = APIRouter(prefix="/servers")
 
 class _Body(BaseModel):
     model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
+
     pagination: Pagination
-    filters: Optional[Filters] = None
+    filters: Optional[ServersFilters] = None
 
 
 @servers_router.post("", response_model=None)
-def get_servers(body: _Body, db: DatabaseDep) -> PaginatedDataResponse[Server]:
+def servers(body: _Body, db: DatabaseDep) -> PaginatedDataResponse[Server]:
     cursor = db.cursor(row_factory=dict_row)
 
     base_query = pypika.Query.from_("servers")
@@ -30,8 +31,10 @@ def get_servers(body: _Body, db: DatabaseDep) -> PaginatedDataResponse[Server]:
 
     total = get_total(cursor, base_query)
 
+    ordered_query = base_query.orderby("updated_at", order=pypika.Order.desc)
+
     paginated_query = body.pagination.apply(
-        base_query.select(
+        ordered_query.select(
             "ip",
             "created_at",
             "updated_at",

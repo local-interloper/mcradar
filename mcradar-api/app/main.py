@@ -1,15 +1,19 @@
-from fastapi import FastAPI, APIRouter
-from routers import servers_router
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from routers import main_router
 import middleware
 
+origins = ["*"]
 
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
 
 app.add_middleware(middleware.AuthMiddleware)
 
-core_router = APIRouter(prefix="/api")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-core_router.include_router(servers_router)
-
-app.include_router(core_router)
-
+app.include_router(main_router)

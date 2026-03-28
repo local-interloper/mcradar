@@ -1,5 +1,5 @@
 services:
-  mc-radar:
+  mcradar:
     container_name: mcradar
     image: local-interloper/mcradar
     build:
@@ -41,6 +41,29 @@ services:
       watch:
         - action: rebuild
           path: ./mcradar-api
+
+  gui:
+    container_name: mcradar-gui
+    image: local-interloper/mcradar-gui
+    build:
+      context: ./mcradar-gui
+
+    env_file: .env
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    ports:
+      - "${APP_GUI_PORT}:3000"
+
+    networks:
+      - mcradar-network
+
+    develop:
+      watch:
+        - action: rebuild
+          path: ./mcradar-gui
 
   db:
     container_name: mcradar-db

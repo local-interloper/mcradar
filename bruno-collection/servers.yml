@@ -1,0 +1,26 @@
+info:
+  name: servers
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://127.0.0.1:8000/api/servers
+  body:
+    type: json
+    data: |-
+      {
+        "filters": {
+        },
+        "pagination": {
+          "first": 0,
+          "last": 50
+        }
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
